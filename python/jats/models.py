@@ -6,24 +6,24 @@ import random
 
 # --- Constants ---
 
-CROCKFORD_ALPHABET = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"
+BASE36_ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyz"
 
 # --- Utils ---
 
-def encode_base32(value: int, length: int) -> str:
+def encode_base36(value: int, length: int) -> str:
     result = ""
     n = value
     while n > 0:
-        result = CROCKFORD_ALPHABET[n % 32] + result
-        n = n // 32
+        result = BASE36_ALPHABET[n % 36] + result
+        n = n // 36
     return result.rjust(length, "0")
 
 def random_3_char() -> str:
-    return "".join(random.choice(CROCKFORD_ALPHABET) for _ in range(3))
+    return "".join(random.choice(BASE36_ALPHABET) for _ in range(3))
 
 def generate_row_id() -> str:
     timestamp = int(time.time() * 1000)
-    return encode_base32(timestamp, 10) + random_3_char()
+    return encode_base36(timestamp, 9) + random_3_char()
 
 def generate_col_id() -> str:
     return f"col_{random_3_char()}"
@@ -33,6 +33,7 @@ def generate_view_id() -> str:
 
 def generate_filter_id() -> str:
     return f"flt_{random_3_char()}"
+
 
 
 # --- Models ---
@@ -56,7 +57,7 @@ class JatsColumnDisplay(BaseModel):
 
 
 class JatsColumn(BaseModel):
-    id: str = Field(pattern=r"^col_[0-9A-Z]{3}$")
+    id: str = Field(pattern=r"^col_[a-z0-9]{3}$")
     name: str
     type: Literal["text", "number", "select", "date", "boolean", "url"]
     description: Optional[str] = None
@@ -65,7 +66,7 @@ class JatsColumn(BaseModel):
 
 
 class JatsFilter(BaseModel):
-    id: str = Field(pattern=r"^flt_[0-9A-Z]{3}$")
+    id: str = Field(pattern=r"^flt_[a-z0-9]{3}$")
     columnId: str
     operator: Literal["is", "isNot", "contains", "gt", "lt", "isEmpty", "isNotEmpty"]
     value: Any
@@ -77,7 +78,7 @@ class JatsSort(BaseModel):
 
 
 class JatsView(BaseModel):
-    id: str = Field(pattern=r"^view_[0-9A-Z]{3}$")
+    id: str = Field(pattern=r"^view_[a-z0-9]{3}$")
     name: str
     description: Optional[str] = None
     filters: List[JatsFilter] = []
@@ -87,7 +88,7 @@ class JatsView(BaseModel):
 
 
 class JatsRow(BaseModel):
-    id: str # Custom validation logic could be added here for 13 chars base32
+    id: str = Field(pattern=r"^[a-z0-9]{12}$")
     cells: Dict[str, Any] = {}
 
 
@@ -106,7 +107,8 @@ class JatsPolicy(BaseModel):
 
 
 class JatsSchema(BaseModel):
-    version: Literal["1.0.0"]
+    schema_url: Optional[str] = Field(default=None, alias="$schema")
+    version: Literal["jats-1.0.0"]
     metadata: JatsMetadata
     policy: Optional[JatsPolicy] = None
     columns: List[JatsColumn] = []

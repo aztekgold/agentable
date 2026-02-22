@@ -5,7 +5,7 @@ from jats.tools import JatsAgentTooling
 def test_manager_initialization():
     manager = JatsManager()
     schema = manager.get_jats()
-    assert schema.version == "1.0.0"
+    assert schema.version == "jats-1.0.0"
     assert len(schema.columns) == 0
     assert len(schema.rows) == 0
 
@@ -19,7 +19,7 @@ def test_add_row():
     manager = JatsManager()
     col = manager.add_column(name="Name", type="text")
     row = manager.add_row({col.id: "Bob"})
-    assert len(row.id) == 13
+    assert len(row.id) == 12
     assert len(manager.get_jats().rows) == 1
     assert row.cells[col.id] == "Bob"
 

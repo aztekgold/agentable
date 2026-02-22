@@ -10,11 +10,14 @@ class JatsManager:
             # Validate and load provided schema
             # Pydantic will handle validation and default values where possible
             if "version" not in initial_schema:
-                initial_schema["version"] = "1.0.0"
+                initial_schema["version"] = "jats-1.0.0"
+            if "$schema" not in initial_schema:
+                initial_schema["$schema"] = "https://raw.githubusercontent.com/aztekgold/jats/main/schema.json"
             self.schema = JatsSchema(**initial_schema)
         else:
             self.schema = JatsSchema(
-                version="1.0.0",
+                schema_url="https://raw.githubusercontent.com/aztekgold/jats/main/schema.json",
+                version="jats-1.0.0",
                 metadata=JatsMetadata(
                     title="New Table",
                     description="Created by JatsManager (Python)"
