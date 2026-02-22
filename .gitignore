@@ -6,9 +6,6 @@ dist/
 coverage/
 .vitest/
 
-# Temp debugging scripts from AI
-patch_agent.js
-patch_agent_test.js
-patch_agent_option.js
-debug_openai.json
-update_fixtures.js
+# Temp debugging folders/scripts
+tmp/
+
