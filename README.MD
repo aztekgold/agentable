@@ -1,7 +1,7 @@
-# AGENTABLE v1.0.0 Specification
+# Agentable v1.0.0 Specification
 ## The JSON Agentic-Friendly Table Standard
 
-AGENTABLE is a platform-agnostic, agent-friendly JSON format for structured data tables. It embeds meaning, structure, and permissions directly into tables, allowing agents to safely read, write, and exchange data with minimal overhead. AGENTABLE is both human- and machine-readable, designed for clarity, longevity, and portability.
+Agentable is a platform-agnostic, agent-friendly JSON format for structured data tables. It embeds meaning, structure, and permissions directly into tables, allowing agents to safely read, write, and exchange data with minimal overhead. Agentable is both human- and machine-readable, designed for clarity, longevity, and portability.
 
 ---
 
